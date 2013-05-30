@@ -15,11 +15,11 @@ boolean flashEngineConfig(EngineConfig* engineConfig){
   return true;
 }
 
-//shouldn't modify engineConfig on fail
 boolean loadEngineConfig(EngineConfig* engineConfig){
  
-  eeprom_read_block(engineConfig, ENGINE_CONFIG_ADDR, sizeof(EngineConfig));
-  if(engineConfig->ECVersion == ENGINE_CONFIG_VER){
+  uint8_t ECVer = eeprom_read_byte(ENGINE_CONFIG_ADDR);
+  if(ECVer == ENGINE_CONFIG_VER){
+    eeprom_read_block(engineConfig, ENGINE_CONFIG_ADDR, sizeof(EngineConfig));
     return true;
   }else{
     return false;
