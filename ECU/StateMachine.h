@@ -19,14 +19,9 @@ typedef struct{
 */
 
 
-//Relies on forward declaration of StateType
-typedef struct{
-  StateType (onEnter*)(void);
-  StateType (onLoop*)(void);
-  StateType (onMessage*)(MessageType mType, void* messageData);
-} State;
 
-#define STATE_UNCHANGED -1
+
+#define STATE_UNCHANGED (StateType)-1
 //StateType and states MUST BE IN SYNC 
 typedef enum { 
   STATE_NOTREADY, 
@@ -37,11 +32,29 @@ typedef enum {
   STATE_EMERGENCYSHUTDOWN
 } StateType;
 
+StateType notReadyOnEnter(void);
+StateType notReadyOnLoop(void);
+//StateType notReadyOnMessage(MessageType mType, void* messageData);
+
+//Relies on forward declaration of StateType
+typedef struct{
+  StateType (*onEnter)(void);
+  StateType (*onLoop)(void);
+  //StateType (*onMessage)(MessageType mType, void* messageData);
+} State;
+
+
+
 State states[] PROGMEM = {
-  {notReadyOnEnter, notReadyOnLoop, notReadyOnMessage}
+  //{notReadyOnEnter, notReadyOnLoop, notReadyOnMessage}
+   {notReadyOnEnter, notReadyOnLoop }
   //...
 };
 
+
+typedef struct{
+  State* currentState;
+} StateMachine;
 
 ////////////////////////////////////
 //NOT READY
@@ -54,9 +67,11 @@ StateType notReadyOnLoop(void){
   return STATE_UNCHANGED;
 }
 
+/*
 StateType notReadyOnMessage(MessageType mType, void* messageData){
   return STATE_UNCHANGED;
 }
+*/
 
 ////////////////////////////////////
 //READY
