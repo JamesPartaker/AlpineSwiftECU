@@ -1,10 +1,20 @@
 
-void setup() {
-  // put your setup code here, to run once:
+#include "StateMachine.h"
+#include "IOManager.h"
 
+StateMachine ecuStatemachine;
+StateType nextState;
+
+void setup() {
+  setupIOManager();
 }
 
 void loop() {
-  // put your main code here, to run repeatedly: 
-  
+ 
+  nextState = ecuStateMachine.currentState.onLoop();
+  if(nextState != STATE_UNCHANGED){
+    ecuStateMachine.currentState = states[nextState];
+    ecuStateMachine.currentState.onEnter();
+  }
+   
 }
