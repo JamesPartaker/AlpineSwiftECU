@@ -2,6 +2,8 @@
 #ifndef IO_MANAGER_H
 #define IO_MANAGER_H
 
+#include "Arduino.h"
+
 void setupIOManager();
 
 void setStartupMotor(boolean enabled);

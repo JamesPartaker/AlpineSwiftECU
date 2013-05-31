@@ -1,8 +1,10 @@
 
 #include "StateMachine.h"
+extern "C"{
 #include "IOManager.h"
+}
 
-StateMachine ecuStatemachine;
+StateMachine ecuStateMachine;
 StateType nextState;
 
 void setup() {
@@ -11,10 +13,10 @@ void setup() {
 
 void loop() {
  
-  nextState = ecuStateMachine.currentState.onLoop();
+  nextState = ecuStateMachine.currentState->onLoop();
   if(nextState != STATE_UNCHANGED){
-    ecuStateMachine.currentState = states[nextState];
-    ecuStateMachine.currentState.onEnter();
+    ecuStateMachine.currentState = &states[nextState];
+    ecuStateMachine.currentState->onEnter();
   }
    
 }
