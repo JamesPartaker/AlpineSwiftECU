@@ -8,19 +8,6 @@
 //what about communications - like configuration, thrust?
 //do we need to keep state across looping state calls?
 
-/*
-enum ConfigMessageType { READ, SET, FLASH };
-
-enum MessageType { MESSAGE_CONFIG,  };
-typedef struct{
-  ConfigMessageType configMessageType;
-  EngineConfig engineConfig;
-} ConfigMessage;
-*/
-
-
-
-
 #define STATE_UNCHANGED ((StateType)-1)
 //StateType and states MUST BE IN SYNC 
 typedef enum { 

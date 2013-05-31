@@ -4,6 +4,8 @@ extern "C"{
   #include "EngineConfig.h"
   #include "IOManager.h"
 }
+#include "Communication.h"
+
 
 EngineConfig engineConfig;
 StateMachine ecuStateMachine;
@@ -12,6 +14,7 @@ extern State states[];
 
 void setup() {
   setupIOManager();
+  setupCommunication();
 }
 
 void loop() {
@@ -21,5 +24,6 @@ void loop() {
     ecuStateMachine.currentState = &states[nextState];
     ecuStateMachine.currentState->onEnter();
   }
-   
+  
+  readMessage();
 }
