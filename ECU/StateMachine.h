@@ -3,6 +3,7 @@
 #define STATE_MACHINE_H
 
 #include <avr/pgmspace.h>
+#include "Message.h"
 
 //what about faults and errors?
 //what about communications - like configuration, thrust?
@@ -21,13 +22,13 @@ typedef enum {
 
 StateType notReadyOnEnter(void);
 StateType notReadyOnLoop(void);
-//StateType notReadyOnMessage(MessageType mType, void* messageData);
+StateType notReadyOnMessage(MessageType mType, void* messageData);
 
 //Relies on forward declaration of StateType
 typedef struct{
   StateType (*onEnter)(void);
   StateType (*onLoop)(void);
-  //StateType (*onMessage)(MessageType mType, void* messageData);
+  StateType (*onMessage)(MessageType mType, void* messageData);
 } State;
 
 
