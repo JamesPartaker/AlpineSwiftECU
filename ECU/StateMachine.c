@@ -1,6 +1,12 @@
 
 #include "StateMachine.h"
 
+State states[] PROGMEM = {
+  //{notReadyOnEnter, notReadyOnLoop, notReadyOnMessage}
+   {notReadyOnEnter, notReadyOnLoop }
+  //...
+};
+
 ////////////////////////////////////
 //NOT READY
 ////////////////////////////////////

@@ -1,13 +1,14 @@
 
-#include "StateMachine.h"
-#include "EngineConfig.h"
 extern "C"{
+  #include "StateMachine.h"
+  #include "EngineConfig.h"
   #include "IOManager.h"
 }
 
 EngineConfig engineConfig;
 StateMachine ecuStateMachine;
 StateType nextState;
+extern State states[];
 
 void setup() {
   setupIOManager();

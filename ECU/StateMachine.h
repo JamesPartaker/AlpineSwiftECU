@@ -44,12 +44,7 @@ typedef struct{
 } State;
 
 
-State states[] PROGMEM = {
-  //{notReadyOnEnter, notReadyOnLoop, notReadyOnMessage}
-   {notReadyOnEnter, notReadyOnLoop }
-  //...
-};
-
+extern State states[] PROGMEM;
 
 typedef struct{
   State* currentState;
