@@ -21,7 +21,7 @@ typedef struct{
 
 
 
-#define STATE_UNCHANGED (StateType)-1
+#define STATE_UNCHANGED ((StateType)-1)
 //StateType and states MUST BE IN SYNC 
 typedef enum { 
   STATE_NOTREADY, 
@@ -44,7 +44,6 @@ typedef struct{
 } State;
 
 
-
 State states[] PROGMEM = {
   //{notReadyOnEnter, notReadyOnLoop, notReadyOnMessage}
    {notReadyOnEnter, notReadyOnLoop }
@@ -56,28 +55,6 @@ typedef struct{
   State* currentState;
 } StateMachine;
 
-////////////////////////////////////
-//NOT READY
-////////////////////////////////////
-StateType notReadyOnEnter(void){
-  return STATE_UNCHANGED;  
-}
-
-StateType notReadyOnLoop(void){
-  return STATE_UNCHANGED;
-}
-
-/*
-StateType notReadyOnMessage(MessageType mType, void* messageData){
-  return STATE_UNCHANGED;
-}
-*/
-
-////////////////////////////////////
-//READY
-////////////////////////////////////
-
-//...
 
 /*
 //States

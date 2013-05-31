@@ -1,9 +1,11 @@
 
 #include "StateMachine.h"
+#include "EngineConfig.h"
 extern "C"{
-#include "IOManager.h"
+  #include "IOManager.h"
 }
 
+EngineConfig engineConfig;
 StateMachine ecuStateMachine;
 StateType nextState;
 
