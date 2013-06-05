@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -11,6 +12,10 @@ import gnu.io.SerialPort;
 public class SerialConnection{	
 	//Connected to
 	private SerialPort serialPort;
+
+	private InputStream in;
+	
+	private OutputStream out;
 	
 	/** Milliseconds to block while waiting for port open */
 	private static final int TIME_OUT = 2000;
@@ -35,6 +40,7 @@ public class SerialConnection{
 		return names;
 	}
 
+	//deal with exceptions, error handling
 	public void open(String portName) throws Exception{
 		CommPortIdentifier portId = CommPortIdentifier.getPortIdentifier(portName);
 		
@@ -49,11 +55,15 @@ public class SerialConnection{
 					SerialPort.PARITY_NONE);
 	
 			// open the streams
-			BufferedReader in = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
-			OutputStream out = serialPort.getOutputStream();	
+			//BufferedReader in = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
+			in = serialPort.getInputStream();
+			out = serialPort.getOutputStream();	
 		
-			(new Thread(new SerialReader(in))).start();
-            (new Thread(new SerialWriter(out))).start();
+			//serialReader = new SerialReader(in);
+			//serialWriter = new SerialWriter(out);
+			
+			//(new Thread(serialReader)).start();
+            //(new Thread(serialWriter)).start();
 			
 		}else{
 			//couldn't find port	
@@ -66,6 +76,14 @@ public class SerialConnection{
 		}
 	}
 	
+	public OutputStream getOutputStream(){
+		return out;
+	}
+	
+	public InputStream getInputStream(){
+		return in;
+	}
+	/*
 	public class SerialReader implements Runnable{
 		BufferedReader in;
 		
@@ -81,20 +99,6 @@ public class SerialConnection{
 			}	
 		}
 	}
-	
-	public class SerialWriter implements Runnable{
-		OutputStream out;
-		
-		SerialWriter(OutputStream out){
-			this.out = out;
-		}
-		
-		public void run() {
-			//while not closed
-			while(){
-				
-			}	
-		}		
-	}
+	*/
 
 }
