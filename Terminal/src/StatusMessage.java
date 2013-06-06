@@ -1,12 +1,12 @@
 import java.awt.Color;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 
 public class StatusMessage extends InputMessage{
 
-	private static final int STATUS_LENGTH = 8;
-	
 	private static final String[] statusCodes = {
 		"OVRSPEED",
 		"FLAMEOUT"
@@ -25,11 +25,12 @@ public class StatusMessage extends InputMessage{
 	private int index = -1;
 
 	StatusMessage(ByteBuffer data){
-		super(data);
+		super();
+		fromByteBuffer(data);
 	}
 	
 	protected void fromByteBuffer(ByteBuffer data){
-		byte[] stringData = new byte[STATUS_LENGTH];
+		byte[] stringData = new byte[data.remaining()];
 		data.get(stringData);
 		String s;
 		try {
@@ -37,13 +38,14 @@ public class StatusMessage extends InputMessage{
 
 			//could use some other data structure to store all this data, but parallel arrays seem alright for now
 			for(int i=0;i<statusCodes.length;i++){
-				if(s.equals(statusCodes[i])){
+				if(s.equalsIgnoreCase(statusCodes[i])){
 					index = i;
 					break;
 				}
 			}
 			if(index == -1){
 				//error, status code not found
+				System.out.println("Error: Status code not found");
 			}
 			
 		} catch (UnsupportedEncodingException e) {
@@ -54,19 +56,35 @@ public class StatusMessage extends InputMessage{
 	}
 	
 	public String getStatusCode(){
-		return statusCodes[index];
+		if(index >= 0 && index < statusCodes.length){
+			return statusCodes[index];
+		}else{
+			return "EMPTY";
+		}
 	}
 	
 	public String getMessage(){
-		return messages[index];
+		if(index >= 0 && index < messages.length){
+			return messages[index];
+		}else{
+			return "EMPTY";
+		}
 	}
 	
 	public Color getColor(){
-		return colors[index];
+		if(index >= 0 && index < colors.length){
+			return colors[index];
+		}else{
+			return Color.WHITE;
+		}
 	}
 
 	public InputMessageType getType() {
 		return InputMessageType.STATUS;
+	}
+	
+	public String toString(){
+		return super.toString() + " - " + getStatusCode() + " - " + getMessage();
 	}
 	
 }

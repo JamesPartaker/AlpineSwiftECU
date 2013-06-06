@@ -4,7 +4,8 @@ import java.nio.ByteBuffer;
 public class ConfigInputMessage extends InputMessage{
 
 	ConfigInputMessage(ByteBuffer data) {
-		super(data);
+		super();
+		fromByteBuffer(data);
 	}
 
 	protected void fromByteBuffer(ByteBuffer data) {

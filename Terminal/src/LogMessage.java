@@ -17,13 +17,14 @@ public class LogMessage extends InputMessage{
 	private boolean fuelSolenoid;
 	
 	LogMessage(ByteBuffer data) {
-		super(data);
+		super();
+		fromByteBuffer(data);
 	}
 	
 	protected void fromByteBuffer(ByteBuffer data){
-		EGT = data.get() * EGT_MULT_CONST;
-		engineSpeed = data.get() * ENG_SPEED_MULT_CONST;
-		if(data.get() > 0){ ignition = true; }else{ ignition = false; }
+		EGT = (data.get() & 0xff) * EGT_MULT_CONST;
+		engineSpeed = (data.get() & 0xff) * ENG_SPEED_MULT_CONST;
+		ignition = (data.get() & 0xff) > 0  ? true : false; 
 		//...
 	}
 	
@@ -38,5 +39,12 @@ public class LogMessage extends InputMessage{
 	public InputMessageType getType(){
 		return InputMessageType.LOG;
 	}	
+	
+	public String toString(){
+		return super.toString() + 
+				" - EGT:" + EGT + "¼C" +
+				" EngineSpeed:" + engineSpeed + "RPM" +
+				" Ignition:" + (ignition ? "On" : "Off");
+	}
 	
 }

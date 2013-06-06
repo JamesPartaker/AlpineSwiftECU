@@ -1,25 +1,51 @@
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+//import java.io.DataInputStream;
+//import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.util.Observable;
 import java.util.Observer;
 
 
 public class MessageCenter{
-
-	DataInputStream in;
-	DataOutputStream out;
 	
-	Observable log;
-	Observable config;
-	Observable status;
+	private InputStream in;
+	private OutputStream out;
+	
+	private MessageReader messageReader;
+	
+	//such a hack
+	private ExternalObservable log;
+	private ExternalObservable config;
+	private ExternalObservable status;
 	
 	MessageCenter(InputStream inputStream, OutputStream outputStream){
-		in = new DataInputStream(inputStream);
-		out = new DataOutputStream(outputStream);
+		in = inputStream;
+		out = outputStream;
+		
+		log = new ExternalObservable();
+		config = new ExternalObservable();
+		status = new ExternalObservable();
+		
+		try {
+			int numToDiscard = in.available();
+			System.out.println("Discarding " + numToDiscard + " bytes in input buffer!");
+			in.skip(numToDiscard);
+		} catch (IOException e1) { e1.printStackTrace(); }
+		
+		messageReader = new MessageReader(in);
+		(new Thread(messageReader)).start();
+		
+		try {
+			out.write("READY".getBytes("US-ASCII"));
+		} catch (Exception e) {
+			System.err.println("Error:" + e.getMessage());
+		}
+		
+		System.out.println("Printed Ready!");
+		
 	}
 	
 	void addLogMessageListener(Observer o){
@@ -35,11 +61,11 @@ public class MessageCenter{
 	}
 	
 	void sendMessage(OutputMessage message){
-		byte[] bytes = message.toByteBuffer().array(); //potentially unsafe, use .hasArray()
+		byte[] bytes = message.toByteBuffer().array(); //TODO: potentially unsafe, use .hasArray()
 		
 		try {
-			out.writeByte(bytes.length);
-			out.writeByte(message.getType().ordinal());
+			out.write(bytes.length);
+			out.write(message.getType().ordinal());
 			out.write(bytes);
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
@@ -55,42 +81,54 @@ public class MessageCenter{
 	
 		public void run() {
 			Message message;
-			ByteBuffer bytes;
-			int length;
+			
 			try {
+				
 				while(true){
-					byte messageLength = (byte)in.read();
+					
+					System.out.println("Waiting to recieve message!");
+					int messageLength = in.read();
 					InputMessageType messageType = InputMessageType.values()[in.read()]; //TODO: handle error for this
 					byte[] messageBody = new byte[messageLength];
 					
-					in.read(messageBody, 0, messageLength);
-					
+					while(in.available() < messageLength){}
+					in.read(messageBody);
+
 					switch(messageType){ 
-						case LOG:
-							message = new LogMessage(ByteBuffer.wrap(messageBody));
-							break;
 						case STATUS:
 							message = new StatusMessage(ByteBuffer.wrap(messageBody));
+							status.setChanged();
+							status.notifyObservers(message);
 							break;
 						case CONFIG_INPUT:
 							message = new ConfigInputMessage(ByteBuffer.wrap(messageBody));
+							config.setChanged();
+							config.notifyObservers(message);
+							break;
+						case LOG:
+							message = new LogMessage(ByteBuffer.wrap(messageBody));
+							log.setChanged();
+							log.notifyObservers(message);
 							break;
 						default:
 							message = null; //error
 							break;
 					}
 					
-					//notify listeners that we have recieved a message
-					//I don't THINK there is a problem with calling this from a separate thread, but I 
-					//could be wrong.
-					log.notifyObservers(message);
-					
 				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
+			} catch (Exception e) {
+				System.err.println(e.getMessage());
 				e.printStackTrace();
 			}
 		}
 	}
 	
+}
+
+class ExternalObservable extends Observable{
+
+	public void setChanged(){
+		super.setChanged();
+	}
+
 }

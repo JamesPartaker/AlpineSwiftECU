@@ -55,18 +55,14 @@ public class SerialConnection{
 					SerialPort.PARITY_NONE);
 	
 			// open the streams
-			//BufferedReader in = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
 			in = serialPort.getInputStream();
 			out = serialPort.getOutputStream();	
-		
-			//serialReader = new SerialReader(in);
-			//serialWriter = new SerialWriter(out);
 			
-			//(new Thread(serialReader)).start();
-            //(new Thread(serialWriter)).start();
+			System.out.println("Connected successfully!");
 			
 		}else{
 			//couldn't find port	
+			System.err.println("Serial Connection Error");
 		}
 	}
 	
@@ -83,22 +79,5 @@ public class SerialConnection{
 	public InputStream getInputStream(){
 		return in;
 	}
-	/*
-	public class SerialReader implements Runnable{
-		BufferedReader in;
-		
-		SerialReader(BufferedReader in){
-			this.in = in;
-		}
-		
-		public void run() {	
-			String line;
-			//while not closed
-			while((line = in.readLine()) != null){
-				//notify listeners	
-			}	
-		}
-	}
-	*/
 
 }
