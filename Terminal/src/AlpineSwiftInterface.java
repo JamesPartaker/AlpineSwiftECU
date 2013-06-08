@@ -12,10 +12,15 @@ import javax.swing.border.LineBorder;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+
+import javax.swing.JLabel;
+import javax.swing.JSlider;
 import javax.swing.JTable;
 import javax.swing.JTree;
 import javax.swing.JTextPane;
 import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
+
 import java.awt.TextArea;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -112,24 +117,66 @@ public class AlpineSwiftInterface extends JFrame {
 		gbc_panel_18.gridy = 0;
 		panel_2.add(panel_18, gbc_panel_18);
 		
+		GridBagLayout gbl_panel_18 = new GridBagLayout();
+		gbl_panel_18.columnWeights = new double[]{1.0, 1.0};
+		gbl_panel_18.rowWeights = new double[]{1.0, 1.0, 1.0};
+		panel_18.setLayout(gbl_panel_18);
+		
 		JButton btnNewButton = new JButton("Startup");
 		btnNewButton.setPreferredSize(new Dimension(200,50));
+		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
+		gbc_btnNewButton.anchor = GridBagConstraints.NORTHWEST;
+		gbc_btnNewButton.insets = new Insets(0, 0, 5, 5);
+		gbc_btnNewButton.gridx = 1;
+		gbc_btnNewButton.gridy = 0;
+		panel_18.add(btnNewButton, gbc_btnNewButton);
 		
 		JButton btnShutdown = new JButton("Shutdown");
 		btnShutdown.setPreferredSize(new Dimension(200,50));
+		GridBagConstraints gbc_btnShutdown = new GridBagConstraints();
+		gbc_btnShutdown.anchor = GridBagConstraints.NORTHWEST;
+		gbc_btnShutdown.insets = new Insets(0, 0, 5, 5);
+		gbc_btnShutdown.gridx = 1;
+		gbc_btnShutdown.gridy = 1;
+		panel_18.add(btnShutdown, gbc_btnShutdown);
 		
 		JButton btnEmergencyShutdown = new JButton("Emergency Shutdown");
 		btnEmergencyShutdown.setPreferredSize(new Dimension(200,50));
+		GridBagConstraints gbc_btnEmergencyShutdown = new GridBagConstraints();
+		gbc_btnEmergencyShutdown.anchor = GridBagConstraints.NORTHWEST;
+		gbc_btnEmergencyShutdown.insets = new Insets(0, 0, 5, 0);
+		gbc_btnEmergencyShutdown.gridx = 1;
+		gbc_btnEmergencyShutdown.gridy = 2;
+		panel_18.add(btnEmergencyShutdown, gbc_btnEmergencyShutdown);
 		//btnEmergencyShutdown.setBackground(new Color(200,30,30));
 		//btnEmergencyShutdown.setOpaque(true);
 		//btnEmergencyShutdown.setBorder(null);
 		
-		panel_18.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		panel_18.add(btnNewButton);
-		panel_18.add(btnShutdown);
-		panel_18.add(btnEmergencyShutdown);
+		JSlider throttleSlider = new JSlider(SwingConstants.VERTICAL, 0, 100, 0);
+		throttleSlider.setMajorTickSpacing(50);
+		throttleSlider.setMinorTickSpacing(10);
+		throttleSlider.setPaintTicks(true);
+		throttleSlider.setPaintLabels(true);
+		GridBagConstraints gbc_throttleSlider = new GridBagConstraints();
+		gbc_throttleSlider.anchor = GridBagConstraints.NORTH;
+		gbc_throttleSlider.insets = new Insets(0, 0, 0, 5);
+		gbc_throttleSlider.gridx = 0;
+		gbc_throttleSlider.gridy = 0;
+		gbc_throttleSlider.gridheight = 3;
+		panel_18.add(throttleSlider, gbc_throttleSlider);
 		
 		JPanel panel_19 = new JPanel();
+		
+		MeterPlotChart mpc = new MeterPlotChart();
+		ChartPanel p = mpc.getChartPanel();
+		p.setPreferredSize(new Dimension(300,200));
+		panel_19.add(p);
+		
+		mpc = new MeterPlotChart();
+		p = mpc.getChartPanel();
+		p.setPreferredSize(new Dimension(300,200));
+		panel_19.add(p);
+		
 		panel_19.setBackground(Color.CYAN);
 		GridBagConstraints gbc_panel_19 = new GridBagConstraints();
 		gbc_panel_19.fill = GridBagConstraints.BOTH;
@@ -161,11 +208,55 @@ public class AlpineSwiftInterface extends JFrame {
 		panel_4.add(chartPanel1);
 		*/
 		
-		DynamicLineChart dynamicLineChart = new DynamicLineChart();
-		dynamicLineChart.start();
-		ChartPanel chartPanel2 = dynamicLineChart.getChartPanel();
-		panel_4.add(chartPanel2);
+		DynamicLineChart[] dlc = new DynamicLineChart[5];
 		
+		for(int i=0;i<5;i++){
+			
+			JPanel panel_1234 = new JPanel();
+			GridBagLayout gbl_panel_1234 = new GridBagLayout();
+			gbl_panel_1234.columnWeights = new double[]{0.95, 0.05};
+			gbl_panel_1234.rowWeights = new double[]{1.0};
+			panel_1234.setLayout(gbl_panel_1234);
+			panel_4.add(panel_1234);
+			
+			dlc[i] = new DynamicLineChart();
+			ChartPanel chartPanel2 = dlc[i].getChartPanel();
+			GridBagConstraints gbc_chart_1 = new GridBagConstraints();
+			gbc_chart_1.anchor = GridBagConstraints.CENTER;
+			gbc_chart_1.insets = new Insets(0, 0, 0, 0);
+			gbc_chart_1.gridx = 0;
+			gbc_chart_1.gridy = 0;
+			gbc_chart_1.fill = GridBagConstraints.BOTH;
+			panel_1234.add(chartPanel2, gbc_chart_1);
+			
+			
+			
+			GridBagConstraints gbc_poop = new GridBagConstraints();
+			gbc_poop.anchor = GridBagConstraints.CENTER;
+			gbc_poop.insets = new Insets(0, 0, 0, 0);
+			gbc_poop.gridx = 1;
+			gbc_poop.gridy = 0;
+			
+			JPanel poop = new JPanel();
+			poop.setLayout(new GridLayout(2,1)); 
+			JLabel jLabel_2 = new JLabel("EGT");
+			JLabel jLabel_1 = new JLabel("500¼C");
+			poop.add(jLabel_2);
+			poop.add(jLabel_1);
+			panel_1234.add(poop, gbc_poop);
+			
+		}
+		
+		for(int i=0;i<5;i++){
+			dlc[i].start();
+		}
+		
+		/*
+		dynamicLineChart = new DynamicLineChart();
+		dynamicLineChart.start();
+		chartPanel2 = dynamicLineChart.getChartPanel();
+		panel_4.add(chartPanel2);
+		*/
 		
 		JPanel panel_5 = new JPanel();
 		panel_5.setBackground(Color.GREEN);
