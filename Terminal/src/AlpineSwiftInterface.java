@@ -207,10 +207,17 @@ public class AlpineSwiftInterface extends JFrame {
 		ChartPanel chartPanel1 = lineChart.getChartPanel();
 		panel_4.add(chartPanel1);
 		*/
+		/*
+		MultiDynamicLineChart mdlc = new MultiDynamicLineChart();
+		mdlc.start();
+		ChartPanel cp = mdlc.getChartPanel();
+		panel_4.add(cp);
+		*/
 		
-		DynamicLineChart[] dlc = new DynamicLineChart[5];
+		int NUM_DLC = 5;
+		DynamicLineChart[] dlc = new DynamicLineChart[NUM_DLC];
 		
-		for(int i=0;i<5;i++){
+		for(int i=0;i<NUM_DLC;i++){
 			
 			JPanel panel_1234 = new JPanel();
 			GridBagLayout gbl_panel_1234 = new GridBagLayout();
@@ -247,10 +254,10 @@ public class AlpineSwiftInterface extends JFrame {
 			
 		}
 		
-		for(int i=0;i<5;i++){
+		for(int i=0;i<NUM_DLC;i++){
 			dlc[i].start();
 		}
-		
+	
 		/*
 		dynamicLineChart = new DynamicLineChart();
 		dynamicLineChart.start();
