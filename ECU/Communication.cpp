@@ -47,6 +47,9 @@ void readMessage(){
     if(Serial.available() >= messageLength){
       Serial.readBytes(messageBuffer, messageLength);
       //send message to state machine
+      
+      
+      
       readingMessage = false;
     }
   }
