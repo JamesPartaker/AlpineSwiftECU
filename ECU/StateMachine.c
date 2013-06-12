@@ -24,7 +24,7 @@ StateType notReadyOnMessage(MessageType mType, void* messageData){
     case  MESSAGE_CONTROL:
       //set throttle?
       ControlMessage* cm = (ControlMessage*)messageData;
-      if(MESSAGE_CONTROL_THROTTLE){
+      if(cm->controlMessageType == MESSAGE_CONTROL_THROTTLE){
         //engine.throttle = cm->throttle;
       }
       
@@ -68,6 +68,24 @@ StateType notReadyOnMessage(MessageType mType, void* messageData){
 ////////////////////////////////////
 //READY
 ////////////////////////////////////
+
+StateType readyOnMessage(MessageType mType, void* messageData){
+  
+  switch(mType){
+  case MESSAGE_CONTROL:
+    ControlMessage* cm = (ControlMessage*)messageData;
+    if(cm->controlMessageType == MESSAGE_CONTROL_THROTTLE){
+      //engine.throttle = cm->throttle;
+    }else if(cm->controlMessageType == MESSAGE_CONTROL_STARTUP){
+      //set the state to startup 
+    }
+    break;
+  case MESSAGE_CONFIG_REQUEST:
+    handleMessageConfigRequest((EngineConfigRequestMessage*)messageData);
+    break;
+  }
+  
+}
 
 //...
 

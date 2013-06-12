@@ -23,7 +23,7 @@ void loop() {
   if(nextState != STATE_UNCHANGED){
     ecuStateMachine.currentState = &states[nextState];
     ecuStateMachine.currentState->onEnter();
-  }
+  }//make it possible to change the state from onEnter?
   
   readMessage();
 }
