@@ -5,16 +5,19 @@ void setupCommunication(){
   Serial.begin(9600);
 }
 
-void writeMessage(MessageType mType, void* messageData){
+void writeMessage(OutputMessageType mType, void* messageData){
  
-  int messageSize;
+  uint8_t messageSize;
   switch(mType){
+    case MESSAGE_STATUS:
+      messageSize = sizeof(StatusMessage);
+      break;
+    case MESSAGE_CONFIG_RESPONSE:
+      messageSize = sizeof(EngineConfigResponseMessage);
+      break;
     case MESSAGE_LOG:
       messageSize = sizeof(LogMessage);
-      break;
-    case MESSAGE_FAULT:
-      messageSize = sizeof(FaultMessage);
-      break;
+      break;  
   }
   
   //need to send header
