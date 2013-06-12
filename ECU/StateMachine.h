@@ -28,7 +28,7 @@ StateType notReadyOnMessage(MessageType mType, void* messageData);
 typedef struct{
   StateType (*onEnter)(void);
   StateType (*onLoop)(void);
-  StateType (*onMessage)(MessageType mType, void* messageData);
+  StateType (*onMessage)(InputMessageType mType, void* messageData);
 } State;
 
 

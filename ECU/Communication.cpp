@@ -49,12 +49,11 @@ void readMessage(){
   }else{
     if(Serial.available() >= messageLength){
       Serial.readBytes(messageBuffer, messageLength);
-      //send message to state machine
-      
-      
-      
+      //send message to ecu state machine
+      ecuStateMachine.state->onMessage(messageType, messageBuffer);
       readingMessage = false;
     }
-  }
-  
+  }  
 }
+
+

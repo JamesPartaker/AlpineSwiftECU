@@ -15,6 +15,17 @@ boolean flashEngineConfig(EngineConfig* engineConfig){
   return true;
 }
 
+boolean setEngineConfig(EngineConfig* dstConfig, EngineConfig* srcConfig){
+  
+  if(srcConfig->ECVersion == ENGINE_CONFIG_VER){  
+    *dstConfig = *srcConfig;
+  }else{
+    return false; 
+  }
+  
+  return true;
+}
+
 boolean loadEngineConfig(EngineConfig* engineConfig){
  
   uint8_t ECVer = eeprom_read_byte(ENGINE_CONFIG_ADDR);
