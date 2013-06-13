@@ -15,6 +15,7 @@ extern State states[];
 void setup() {
   setupIOManager();
   setupCommunication();
+  updateSensorReadings();
 }
 
 void loop() {
@@ -25,5 +26,6 @@ void loop() {
     ecuStateMachine.currentState->onEnter();
   }//make it possible to change the state from onEnter?
   
+  updateSensorReadings();
   readMessage();
 }

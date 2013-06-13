@@ -10,17 +10,17 @@ void setStartupMotor(boolean enabled);
 
 void setStartupMotorSpeed(uint8_t motorSpeed);
 
-void setFuelSolenoid(boolean isOpen);
+void setFuelSolenoid(boolean openSolenoid);
 
 void setFuelValvePos(uint8_t valvePos);
 
 void setIgnition(boolean ignite);
 
-uint32_t readEngineSpeed();
+uint32_t getEngineSpeed();
 
-uint16_t readEGT();
+uint16_t getEGT();
 
-uint8_t readThrottle();
+uint8_t getThrottle();
 
 #endif
 
