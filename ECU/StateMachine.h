@@ -9,10 +9,10 @@
 //what about communications - like configuration, thrust?
 //do we need to keep state across looping state calls?
 
-#define STATE_UNCHANGED ((StateType)-1)
+#define STATE_UNCHANGED 0
 //StateType and states MUST BE IN SYNC 
 typedef enum { 
-  STATE_NOTREADY, 
+  STATE_NOTREADY = 1, 
   STATE_READY, 
   STATE_STARTUP, 
   STATE_RUNNING, 
@@ -20,13 +20,13 @@ typedef enum {
   STATE_EMERGENCYSHUTDOWN
 } StateType;
 
-StateType notReadyOnEnter(void);
+void notReadyOnEnter(void);
 StateType notReadyOnLoop(void);
 StateType notReadyOnMessage(MessageType mType, void* messageData);
 
 //Relies on forward declaration of StateType
 typedef struct{
-  StateType (*onEnter)(void);
+  void (*onEnter)(void);
   StateType (*onLoop)(void);
   StateType (*onMessage)(InputMessageType mType, void* messageData);
 } State;

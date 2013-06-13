@@ -13,7 +13,7 @@
 
 uint32_t engineSpeed;
 uint16_t EGT;
-uint16_t thrust;
+uint8_t throttle;
 
 void setupIOManager(){
 /*
@@ -61,7 +61,8 @@ void setFuelSolenoid(boolean openSolenoid){
 void setFuelValvePos(uint8_t valvePos){
 //only if the fuel solenoid is open?
 //take into account the min/max voltage of the fuel pump  
-
+//is 255 max fuel? or fuel for max speed?
+//
   //analogWrite(PIN_FUEL_VALVE, valvePos);
 
 }
@@ -79,6 +80,6 @@ uint16_t getEGT(){
 }
 
 uint8_t getThrottle(){
-  
+  return throttle;
 }
 
