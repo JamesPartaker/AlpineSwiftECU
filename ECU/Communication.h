@@ -6,7 +6,7 @@
 
 void setupCommunication();
 
-void writeMessage(MessageType mType, void* messageData);
+void writeMessage(OutputMessageType mType, void* messageData, int messageSize);
 
 void readMessage();
 

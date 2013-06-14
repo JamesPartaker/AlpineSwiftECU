@@ -16,8 +16,8 @@ uint16_t EGT;
 uint8_t throttle;
 
 void setupIOManager(){
-/*
-  pinMode(, INPUT);
+  
+ // pinMode(, INPUT);
   
   pinMode(PIN_FUEL_PUMP, OUTPUT);
   analogWrite(FUEL_PUMP, 0);
@@ -30,7 +30,7 @@ void setupIOManager(){
   
   pinMode(PIN_IGNITION, OUTPUT);
   digitalWrite(IGNITION, LOW);
-  */
+  
    
 }
 
@@ -44,13 +44,7 @@ void updateSensorReadings(){
   
 }
 
-void setStartupMotor(boolean enabled){
-
-}
-
 void setStartupMotorSpeed(uint8_t motorSpeed){
-  //only if enabled?
-  //convert?
   analogWrite(PIN_START_MOTOR, motorSpeed);
 }
 
@@ -59,12 +53,7 @@ void setFuelSolenoid(boolean openSolenoid){
 }
 
 void setFuelValvePos(uint8_t valvePos){
-//only if the fuel solenoid is open?
-//take into account the min/max voltage of the fuel pump  
-//is 255 max fuel? or fuel for max speed?
-//
-  //analogWrite(PIN_FUEL_VALVE, valvePos);
-
+  analogWrite(PIN_FUEL_VALVE, valvePos);
 }
 
 void setIgnition(boolean ignite){
@@ -72,7 +61,7 @@ void setIgnition(boolean ignite){
 }
 
 uint32_t getEngineSpeed(){
-  return engineSpeed; //actual speed?
+  return engineSpeed;
 }
 
 uint16_t getEGT(){

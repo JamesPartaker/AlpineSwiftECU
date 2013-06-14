@@ -5,23 +5,9 @@ void setupCommunication(){
   Serial.begin(9600);
 }
 
-void writeMessage(OutputMessageType mType, void* messageData){
- 
-  uint8_t messageSize;
-  switch(mType){
-    case MESSAGE_STATUS:
-      messageSize = sizeof(StatusMessage);
-      break;
-    case MESSAGE_CONFIG_RESPONSE:
-      messageSize = sizeof(EngineConfigResponseMessage);
-      break;
-    case MESSAGE_LOG:
-      messageSize = sizeof(LogMessage);
-      break;  
-  }
-  
-  //need to send header
-  Serial.write(messageSize);//make sure uint8_t
+//perhaps add messageSize as a parameter
+void writeMessage(OutputMessageType mType, void* messageData, uint8_t messageSize){
+  Serial.write(messageSize);
   Serial.write(mType); //make sure uint8_t
   Serial.write((uint8_t*)messageData, messageSize);
   Serial.flush();

@@ -3,14 +3,28 @@
 
 State states[] PROGMEM = {
   {notReadyOnEnter, notReadyOnLoop, notReadyOnMessage}
+  {readyOnEnter, readyOnLoop, readyOnMessage}
+  {startupOnEnter, startupOnLoop, startupOnMessage}
   //...
 };
+
+
+//GENERIC
+
+void empty(){
+  return;
+}
+
+StateType unchanged(void){
+  return STATE_UNCHANGED; 
+}
 
 ////////////////////////////////////
 //NOT READY
 ////////////////////////////////////
-StateType notReadyOnEnter(void){
-  return STATE_UNCHANGED;  
+
+void notReadyOnEnter(void){
+  return;  
 }
 
 StateType notReadyOnLoop(void){
@@ -78,6 +92,9 @@ StateType readyOnMessage(MessageType mType, void* messageData){
       //engine.throttle = cm->throttle;
     }else if(cm->controlMessageType == MESSAGE_CONTROL_STARTUP){
       //set the state to startup 
+      
+      //only if startup requirements are met 
+      return STATE_STARTUP;
     }
     break;
   case MESSAGE_CONFIG_REQUEST:
@@ -87,5 +104,67 @@ StateType readyOnMessage(MessageType mType, void* messageData){
   
 }
 
-//...
+StateType readyOnLoop(void){
+  return STATE_UNCHANGED;
+}
+
+
+////////////////////////////////////
+//STARTUP
+////////////////////////////////////
+
+void startupOnEnter(void){
+  startupState = JUST_STARTING;
+  
+  setStartupMotorSpeed(); //based on some calculation?
+}
+
+StateType startupOnMessage(MessageType mType, void* messageData){
+  
+  switch(mType){
+  case MESSAGE_CONTROL:
+    ControlMessage* cm = (ControlMessage*)messageData;
+    if(cm->controlMessageType == MESSAGE_CONTROL_EMERG_SHUTDOWN){
+      return STATE_EMERGENCYSHUTDOWN; 
+    }
+    //throttle
+  }
+  
+}
+
+
+StateType startupOnLoop(void){
+  
+  switch(startupState){
+  case JUST_STARTING:
+    
+    if(getEngineSpeed() > MIN_STARTUP_ENGINE_SPEED){
+      startupState = INIT_FUEL_FLOW;
+    }
+    
+    break;
+    
+  case INIT_FUEL_FLOW:
+    
+    
+  
+    break;
+  
+  case IGNITION:
+  
+    break;
+    
+  case TO_IDLE:
+  
+  
+  
+    return STATE_RUNNING;
+    break;
+  }
+  
+  
+}
+
+
+
 

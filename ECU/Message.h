@@ -11,23 +11,24 @@ typedef enum { MESSAGE_CONTROL_STARTUP, MESSAGE_CONTROL_SHUTDOWN, MESSAGE_CONTRO
 
 typedef enum { MESSAGE_CONFIG_SET, MESSAGE_CONFIG_FLASH, MESSAGE_CONFIG_READ } ConfigMessageType;
 
-typedef enum { MESSAGE_STATUS_EBADENGCONFVER,  } StatusMessage; //TODO: change name
+typedef enum { 
+  MESSAGE_STATUS_EBADENGCONFVER, 
+  MESSAGE_STATUS_SNOREADY, 
+  MESSAGE_STATUS_SREADY, 
+  MESSAGE_STATUS_SSTARTUP, 
+  MESSAGE_STATUS_SRUNNING, 
+  MESSAGE_STATUS_SSHUDOWN, 
+  MESSAGE_STATUS_SEMERGYS
+} StatusMessage; //TODO: change name
 
 char* statusCodes[] PROGMEM = {
   "ECONFVER",
-  "E",
-  "E",
-  "E",
-  "E",
-  "F",
-  "F",
-  "F",
-  "S",
-  "S",
-  "S",
-  "S",
-  "S",
-  "S",
+  "SNOREADY",
+  "SREADY",
+  "SSTARTUP",
+  "SRUNNING",
+  "SSHUDOWN",
+  "SEMERGYS",
 }; 
 
 //INPUT

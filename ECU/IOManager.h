@@ -6,8 +6,6 @@
 
 void setupIOManager();
 
-void setStartupMotor(boolean enabled);
-
 void setStartupMotorSpeed(uint8_t motorSpeed);
 
 void setFuelSolenoid(boolean openSolenoid);
