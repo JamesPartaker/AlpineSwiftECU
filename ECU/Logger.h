@@ -3,12 +3,6 @@
 
 #include "IOManager.h"
 
-void setupLogging(){
- 
- 
-  
-}
-
 void doLog(){
   
   LogMessage log;    

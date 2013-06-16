@@ -116,7 +116,7 @@ StateType readyOnLoop(void){
 void startupOnEnter(void){
   startupState = JUST_STARTING;
   
-  setStartupMotorSpeed(); //based on some calculation?
+  setStartupMotorSpeed(); //based on some calculation? TODO
 }
 
 StateType startupOnMessage(MessageType mType, void* messageData){
@@ -132,7 +132,7 @@ StateType startupOnMessage(MessageType mType, void* messageData){
   
 }
 
-
+//have a way to re-try startup sequence when it fails to ignite
 StateType startupOnLoop(void){
   
   switch(startupState){
@@ -145,25 +145,79 @@ StateType startupOnLoop(void){
     break;
     
   case INIT_FUEL_FLOW:
-    
-    
-  
+    //disengage startup motor
+    setStartupMotor(0);
+    setFuelSolenoid(true);
+    startupState = IGNITION;
     break;
   
   case IGNITION:
-  
+    setFuelValve(); //how to specify value?
+    setIgnition(true);
     break;
     
   case TO_IDLE:
-  
-  
-  
-    return STATE_RUNNING;
+    
+    if(){
+      return STATE_RUNNING;
+    }
     break;
   }
   
   
 }
+
+
+////////////////////////////////////
+//RUNNING
+////////////////////////////////////
+
+StateType startupOnMessage(MessageType mType, void* messageData){
+  
+  switch(mType){
+  case MESSAGE_CONTROL:
+    ControlMessage* cm = (ControlMessage*)messageData;
+    if(cm->controlMessageType == MESSAGE_CONTROL_EMERG_SHUTDOWN){
+      return STATE_EMERGENCYSHUTDOWN; 
+    }else if(cm->controlMessageType == MESSAGE_CONTROL_SHUTDOWN){
+      return STATE_SHUTDOWN;
+    }else if(cm->controlMessageType == MESSAGE_CONTROL_THROTTLE){
+      //?
+    }
+
+  }
+  
+}
+
+StateType runningOnLoop(void){
+   
+  //make sure that we don't overspeed
+  
+  //make sure that we don't flameout
+  
+  //make sure that we don't surge
+  
+  //set the amount of fuel entering the engine based on throttle
+  
+}
+
+////////////////////////////////////
+//SHUTDOWN
+////////////////////////////////////
+
+StateType shutdownOnLoop(void){
+  //to idle
+  // 
+}
+
+////////////////////////////////////
+//EMERGENCY SHUTDOWN
+////////////////////////////////////
+
+StateType emergShutdownOnLoop(void){
+  
+}
+
 
 
 

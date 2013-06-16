@@ -5,7 +5,6 @@ void setupCommunication(){
   Serial.begin(9600);
 }
 
-//perhaps add messageSize as a parameter
 void writeMessage(OutputMessageType mType, void* messageData, uint8_t messageSize){
   Serial.write(messageSize);
   Serial.write(mType); //make sure uint8_t
