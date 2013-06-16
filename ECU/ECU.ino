@@ -1,3 +1,5 @@
+#include <Event.h>
+#include <Timer.h>
 
 extern "C"{
   #include "StateMachine.h"
@@ -6,19 +8,19 @@ extern "C"{
 }
 #include "Communication.h"
 
+extern State states[];
 
 EngineConfig engineConfig;
 StateMachine ecuStateMachine;
-StateType nextState;
-extern State states[];
 
+Timer timer;
 
+//maybe move
 void setEcuState(StateType nextState){
   
   if(nextState != STATE_UNCHANGED){
     ecuStateMachine.currentState = &states[nextState];
     ecuStateMachine.currentState->onEnter();
-    //send a status message that we have set a new state
   }
   
 }
@@ -28,22 +30,25 @@ void setup() {
   setupIOManager();
   setupCommunication();
   updateSensorReadings();
+  timer.every(1000, doLog);
   
-
   if(loadEngineConfig(&engineConfig)){
-    setState(STATE_READY);
+    setEcuState(STATE_READY);
+    sendStatusMessage(MESSAGE_STATUS_SREADY); //do this automatically
   }else{
     sendStatusMessage(MESSAGE_STATUS_EBADENGCONFVER);
-    setState(STATE_NOTREADY);
+    setEcuState(STATE_NOTREADY);
+    sendStatusMessage(MESSAGE_STATUS_SNOREADY);
   }
 
 }
 
 void loop() {
- 
-  nextState = ecuStateMachine.currentState->onLoop();
-  setState(nextState);
   
+  StateType nextState = ecuStateMachine.currentState->onLoop();
+  setEcuState(nextState);
+  
+  timer.update();
   updateSensorReadings();
   readMessage();
 }

@@ -15,6 +15,11 @@ uint32_t engineSpeed;
 uint16_t EGT;
 uint8_t throttle;
 
+uint8_t startupMotorVoltage;
+uint8_t fuelPumpVoltage;
+boolean isFuelSolenoidOpen;
+boolean isIgnitionOn;
+
 void setupIOManager(){
   
  // pinMode(, INPUT);
@@ -48,16 +53,32 @@ void setStartupMotorSpeed(uint8_t motorSpeed){
   analogWrite(PIN_START_MOTOR, motorSpeed);
 }
 
+uint8_t getStartupMotor(){
+  return startupMotorVoltage;
+}
+
 void setFuelSolenoid(boolean openSolenoid){
   digitalWrite(PIN_FUEL_SOL, openSolenoid ? HIGH : LOW);
+}
+
+boolean getFuelSolenoid(){
+  return isFuelSolenoidOpen;
 }
 
 void setFuelValvePos(uint8_t valvePos){
   analogWrite(PIN_FUEL_VALVE, valvePos);
 }
 
+uint8_t getFuelValve(){
+  return fuelValveVoltage;
+}
+
 void setIgnition(boolean ignite){
   digitalWrite(PIN_IGNITION, ignite ? HIGH : LOW);
+}
+
+boolean getIgnition(){
+  return isIgnitionOn;
 }
 
 uint32_t getEngineSpeed(){

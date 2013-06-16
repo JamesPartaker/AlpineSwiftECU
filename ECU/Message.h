@@ -51,10 +51,18 @@ typedef struct{
   EngineConfig engineConfig;
 } EngineConfigResponseMessage;
 
+#define INGITION_BIT 0x01
+#define FUEL_SOLENOID_BIT 0x02
+
 typedef struct{
-   uint8_t engineSpeed;
-   uint8_t EGT;
+   uint8_t bitField; //ignition, fuel solenoid
+   uint16_t engineSpeed; //RPM
+   uint8_t EGT; //C
+   uint8_t throttle; //%
+   uint8_t startupMotor; //voltage
+   uint8_t fuelValve; //voltage
 } LogMessage;
+
 
 #endif
 

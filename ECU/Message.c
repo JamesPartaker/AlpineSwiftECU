@@ -1,4 +1,4 @@
-
+#include "<Message.h"
 
 void sendStatusMessage(StatusMessage toSend){
   writeMessage(MESSAGE_STATUS, statusCodes[toSend], sizeof(StatusMessage));
