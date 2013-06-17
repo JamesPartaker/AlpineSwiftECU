@@ -156,6 +156,11 @@ StateType startupOnLoop(void){
     setIgnition(true);
     break;
     
+  case CHECK_FOR_IGNITION:
+    if(EGT > ){ //perhaps check for an increase in the EGT
+      
+    }
+    break;
   case TO_IDLE:
     
     if(){

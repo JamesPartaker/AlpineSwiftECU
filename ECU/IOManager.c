@@ -1,11 +1,15 @@
 
 #include "IOManager.h"
 
-
+//input
 #define PIN_EGT_THERMO A0
 #define PIN_THROTTLE A1
 #define PIN_LOAD_SENSOR A2
-//
+
+//nope
+#define PIN_ENG_SPEED 8
+
+//output
 #define PIN_FUEL_PUMP 9
 #define PIN_FUEL_SOL 10
 #define PIN_START_MOTOR 11
@@ -19,6 +23,15 @@ uint8_t startupMotorVoltage;
 uint8_t fuelPumpVoltage;
 boolean isFuelSolenoidOpen;
 boolean isIgnitionOn;
+
+//engine speed
+volatile uint16_t currCount;
+unsigned long countUntilTimeIs;
+
+//a tenth of a second (in microseconds)
+#define ENGINE_SPEED_UPDATE_PERIOD 100000
+//essentially (1/period) but in microseconds
+#define ENGINE_SPEED_UPDATE_FREQ (1000000 / ENGINE_SPEED_UPDATE_PERIOD)
 
 void setupIOManager(){
   
@@ -36,7 +49,15 @@ void setupIOManager(){
   pinMode(PIN_IGNITION, OUTPUT);
   digitalWrite(IGNITION, LOW);
   
-   
+  //setup engine speed ISR
+  countUntilTimeIs = micros() + ENGINE_SPEED_UPDATE_PERIOD;
+  currCount = 0;
+  attachInterrupt(0, engineSpeedISR, RISING);
+  
+}
+
+void engineSpeedISR(void){
+  ++currCount;
 }
 
 void updateSensorReadings(){
@@ -46,6 +67,17 @@ void updateSensorReadings(){
   
   uint16_t rawThrust = analogRead(PIN_LOAD_SENSOR);
   //convert
+  
+  //engine speed
+  if(micros() > countUntilTimeIs){
+    noInterrupts();
+
+    engineSpeed = (uint32_t)currCount * ENGINE_SPEED_UPDATE_FREQ * 60;
+    countUntilTimeIs = micros() + ENGINE_SPEED_UPDATE_PERIOD;
+    currCount = 0;
+    
+    interrupts();
+  }
   
 }
 
