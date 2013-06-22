@@ -6,6 +6,9 @@
 #define PIN_THROTTLE A1
 #define PIN_LOAD_SENSOR A2
 
+//nope
+#define PIN_ENG_SPEED 8
+
 //output
 #define PIN_FUEL_PUMP 9
 #define PIN_FUEL_SOL 10
