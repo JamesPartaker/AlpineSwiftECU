@@ -48,7 +48,8 @@ void loop() {
   StateType nextState = ecuStateMachine.currentState->onLoop();
   setEcuState(nextState);
   
-  timer.update();
+  timer.update(); //log
   updateSensorReadings();
   readMessage();
 }
+

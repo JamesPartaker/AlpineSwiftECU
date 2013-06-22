@@ -115,7 +115,7 @@ StateType readyOnLoop(void){
 
 void startupOnEnter(void){
   startupState = JUST_STARTING;
-  
+  //move
   setStartupMotorSpeed(); //based on some calculation? TODO
 }
 
@@ -156,6 +156,22 @@ StateType startupOnLoop(void){
     setIgnition(true);
     break;
     
+  case CHECK_FOR_IGNITION:
+    if(millis() < timeLimit){
+      if(EGT > EGT_TO_DETECT_IGNITION){ //perhaps check for an increase in the EGT
+        
+      }
+    }else{
+      if(timesRetried <= timesToRetry){
+        //go back to retry
+        ++timesRetried;
+        startupState = RETRY_IGNITION;
+      }else{
+       // shut 'er down
+       //purge explosion chambers from extra fuel
+      }
+    }
+    break;
   case TO_IDLE:
     
     if(){
@@ -164,7 +180,7 @@ StateType startupOnLoop(void){
     break;
   }
   
-  
+  return STATE_UNCHANGED;
 }
 
 
@@ -192,6 +208,14 @@ StateType startupOnMessage(MessageType mType, void* messageData){
 StateType runningOnLoop(void){
    
   //make sure that we don't overspeed
+  if(engineSpeed > MAX_ENGINE_SPEED_RPM){
+    //turn down the throttle 
+  }
+  
+  //make sure that we don't hit max temp
+  if(EGT > MAX_RUNNING_EGT){
+    //turn down the throttle?
+  }
   
   //make sure that we don't flameout
   
@@ -206,8 +230,63 @@ StateType runningOnLoop(void){
 ////////////////////////////////////
 
 StateType shutdownOnLoop(void){
-  //to idle
-  // 
+  
+  switch(shutdownState){
+  case TO_IDLE:
+    //use fuel ramper to set engine to idle
+    break; 
+  case REACHING_IDLE:
+    //if we're at our idle engine speed and temps
+    break;
+  case DELAY:
+    // just wait for a few seconds
+    if(millis() > delayUntil){
+      shutdownState = SHUTOFF;
+    }
+    break;
+  case SHUTOFF:
+    //turn off the fuel pump, and solenoid
+    setFuelPump(false);
+    setFuelSolenoid(false);
+    break;
+  case REACHING_:
+    if(engineSpeed < ){
+      shutdownState = INCREASE_COOLING; 
+    }
+    break; 
+  case INCREASE_COOLING:
+    //turn on the startup motor - up to 7k
+    setStartupMotorToRPM(7000);
+    
+    if(engineSpeed > 7000){
+      shutdownState = DECREASE_COOLING; 
+    }
+    
+    break;
+  case DECREASE_COOLING:
+    setStartupMotorToRPM(1000);
+    
+    if(engineSpeed < 1000){
+      ++numRepeats
+      if(getEGT() < EGT_SHUTDOWN_COOLDOWN_TO  || numRepeats > MAX_TIMES_TO_REPEAT){
+        setStartupMotor(false);
+        shutdownState = TO_READY;
+      }else{
+        shutdownState = INCREASE_COOLING;
+      }
+    }
+    
+    //turn off the startup motor - down to 1k
+    //if the engine is cool enough stop, otherwise keep going, max at 6
+    break;
+  case TO_READY:
+    if(engineSpeed < 10){
+      return STATE_READY;
+    }
+    break;
+  }
+  
+  return STATE_UNCHANGED;
 }
 
 ////////////////////////////////////
