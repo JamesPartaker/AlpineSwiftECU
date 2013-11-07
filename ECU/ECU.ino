@@ -34,11 +34,9 @@ void setup() {
   
   if(loadEngineConfig(&engineConfig)){
     setEcuState(STATE_READY);
-    sendStatusMessage(MESSAGE_STATUS_SREADY); //do this automatically
   }else{
     sendStatusMessage(MESSAGE_STATUS_EBADENGCONFVER);
     setEcuState(STATE_NOTREADY);
-    sendStatusMessage(MESSAGE_STATUS_SNOREADY);
   }
 
 }

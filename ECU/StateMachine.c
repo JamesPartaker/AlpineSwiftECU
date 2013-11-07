@@ -24,6 +24,7 @@ StateType unchanged(void){
 ////////////////////////////////////
 
 void notReadyOnEnter(void){
+  sendStatusMessage(MESSAGE_STATUS_SNOREADY);
   return;  
 }
 
@@ -85,6 +86,8 @@ StateType notReadyOnMessage(MessageType mType, void* messageData){
 
 StateType readyOnMessage(MessageType mType, void* messageData){
   
+  sendStatusMessage(MESSAGE_STATUS_SREADY);
+  
   switch(mType){
   case MESSAGE_CONTROL:
     ControlMessage* cm = (ControlMessage*)messageData;
@@ -114,6 +117,9 @@ StateType readyOnLoop(void){
 ////////////////////////////////////
 
 void startupOnEnter(void){
+  
+  sendStatusMessage(MESSAGE_STATUS_SREADY);
+  
   startupState = JUST_STARTING;
   //move
   setStartupMotorSpeed(); //based on some calculation? TODO
@@ -188,7 +194,11 @@ StateType startupOnLoop(void){
 //RUNNING
 ////////////////////////////////////
 
-StateType startupOnMessage(MessageType mType, void* messageData){
+void runningOnEnter(void){
+  sendStatusMessage(MESSAGE_STATUS_SRUNNING); 
+}
+
+StateType runningOnMessage(MessageType mType, void* messageData){
   
   switch(mType){
   case MESSAGE_CONTROL:
@@ -228,6 +238,10 @@ StateType runningOnLoop(void){
 ////////////////////////////////////
 //SHUTDOWN
 ////////////////////////////////////
+
+void shutdownOnEnter(void){
+  sendStatusMessage(MESSAGE_STATUS_SSHUTDOWN); 
+}
 
 StateType shutdownOnLoop(void){
   
@@ -292,6 +306,10 @@ StateType shutdownOnLoop(void){
 ////////////////////////////////////
 //EMERGENCY SHUTDOWN
 ////////////////////////////////////
+
+void emergShutdownOnEnter(void){
+  sendStatusMessage(MESSAGE_STATUS_SEMERGYS);
+}
 
 StateType emergShutdownOnLoop(void){
   

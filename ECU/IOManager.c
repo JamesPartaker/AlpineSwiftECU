@@ -36,18 +36,22 @@ unsigned long countUntilTimeIs;
 void setupIOManager(){
   
  // pinMode(, INPUT);
-  
+ 
   pinMode(PIN_FUEL_PUMP, OUTPUT);
   analogWrite(FUEL_PUMP, 0);
+  fuelPumpVoltage = 0;
   
   pinMode(PIN_FUEL_SOL, OUTPUT);
   analogWrite(FUEL_SOL, 0);
+  isFuelSolenoidOpen = 0;
   
   pinMode(PIN_START_MOTOR, OUTPUT);
   analogWrite(START_MOTOR, 0);
+  startupMotorVoltage = 0;
   
   pinMode(PIN_IGNITION, OUTPUT);
   digitalWrite(IGNITION, LOW);
+  isIgnitionOn = false
   
   //setup engine speed ISR
   countUntilTimeIs = micros() + ENGINE_SPEED_UPDATE_PERIOD;
@@ -85,6 +89,7 @@ void updateSensorReadings(){
 }
 
 void setStartupMotorSpeed(uint8_t motorSpeed){
+  startupMotorVoltage = motorSpeed
   analogWrite(PIN_START_MOTOR, motorSpeed);
 }
 
@@ -93,6 +98,7 @@ uint8_t getStartupMotor(){
 }
 
 void setFuelSolenoid(boolean openSolenoid){
+  isFuelSolenoidOpen = openSolenoid;
   digitalWrite(PIN_FUEL_SOL, openSolenoid ? HIGH : LOW);
 }
 
@@ -101,6 +107,7 @@ boolean getFuelSolenoid(){
 }
 
 void setFuelValvePos(uint8_t valvePos){
+  fuelPumpVoltage = valvePos;
   analogWrite(PIN_FUEL_VALVE, valvePos);
 }
 
@@ -109,6 +116,7 @@ uint8_t getFuelValve(){
 }
 
 void setIgnition(boolean ignite){
+  isIgnitionOn = ignite;
   digitalWrite(PIN_IGNITION, ignite ? HIGH : LOW);
 }
 
